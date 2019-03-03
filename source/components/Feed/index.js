@@ -19,6 +19,7 @@ export default class Feed extends Component {
 		this._createPost = this._createPost.bind(this);
         this._setPostsFetchingState = this._setPostsFetchingState.bind(this);
         this._likePost = this._likePost.bind(this);
+        this._deletePost = this._deletePost.bind(this);
 	}
 	state = {
 		posts: [
@@ -30,7 +31,7 @@ export default class Feed extends Component {
 
     _setPostsFetchingState(state) {
         this.setState({
-            isPostsFetching: state,
+            isPostFetching: state,
         });
     }
 
@@ -77,7 +78,24 @@ export default class Feed extends Component {
 
         this.setState({
             posts: newPosts,
-            isPostsFetching: false,
+            isPostFetching: false,
+        });
+    }
+
+    async _deletePost (id) {
+
+        this._setPostsFetchingState(true);
+
+        await delay(1200);
+
+        this.state.posts.map(post => {
+            if (post.id === id) {
+                const newPosts = this.state.posts.filter(n => n!==post);
+                this.setState({
+                    posts: newPosts,
+                    isPostFetching: false,
+                });
+            }
         });
     }
 
@@ -89,6 +107,7 @@ export default class Feed extends Component {
     			key = { post.id } 
     			{...post}
                 _likePost = { this._likePost }
+                _deletePost = { this._deletePost }
 			/>
     	});
         return (
